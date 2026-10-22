@@ -81,7 +81,7 @@ export default function AdminPage() {
       setForm((current) => ({ ...current, thumbnail_url: url }));
       setMessage("اترفعت صورة الغلاف بنجاح.");
     } catch (e) {
-      setError((e instanceof Error ? e.message : "فشل رفع الصورة.") + " تأكد من وجود bucket باسم project-covers وصلاحيات الرفع.");
+      setError((e instanceof Error ? e.message : "فشل رفع الصورة.") + " تأكد من إعدادات bucket باسم portfolio-assets وصلاحيات الرفع.");
     } finally { setBusy(false); }
   }
 
