@@ -1,10 +1,10 @@
 const SUPABASE_URL = process.env.NEXT_PUBLIC_SUPABASE_URL?.trim();
 // Clean common copy/paste artifacts (quotes, whitespace, and invisible Unicode marks).
 const SUPABASE_KEY = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY
-  ?.replace(/[\\u200B-\\u200D\\uFEFF]/g, "")
+  ?.replace(/[\u200B-\u200D\uFEFF]/g, "")
   .trim()
-  .replace(/^(["'])(.*)\\1$/, "$2")
-  .replace(/\\s+/g, "");
+  .replace(/^(["'])(.*)\1$/, "$2")
+  .replace(/\s+/g, "");
 
 export type PortfolioProject = {
   id: number | string;
@@ -23,10 +23,9 @@ export function configReady() {
 
 function headers(token?: string, extra: Record<string, string> = {}) {
   if (!SUPABASE_KEY) throw new Error("NEXT_PUBLIC_SUPABASE_ANON_KEY is missing.");
-  // Browser Headers only accepts byte-range characters. Fail with a clear message
-  // if a copied Vercel value accidentally contains non-ASCII characters.
-  if (/[^\x20-\x7E]/.test(SUPABASE_KEY)) {
-    throw new Error("مفتاح Supabase في Vercel يحتوي على حروف أو مسافات غير صالحة. انسخ قيمة anon/publishable من Supabase من جديد بدون علامات اقتباس أو نص إضافي.");
+  // Accept only known Supabase public key formats after cleaning copy/paste artifacts.
+  if (!/^(sb_publishable_[A-Za-z0-9_-]+|eyJ[A-Za-z0-9._-]+)$/.test(SUPABASE_KEY)) {
+    throw new Error("قيمة NEXT_PUBLIC_SUPABASE_ANON_KEY في Vercel مش مفتاح Supabase صالح. انسخ Publishable key أو anon key فقط من Supabase والصقه من جديد.");
   }
   if (token && /[^\x20-\x7E]/.test(token)) {
     throw new Error("جلسة تسجيل الدخول غير صالحة. سجّل الخروج وادخل مرة أخرى.");
