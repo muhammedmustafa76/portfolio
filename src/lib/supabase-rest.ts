@@ -101,3 +101,13 @@ export async function uploadCover(file: File, token: string) {
   await parseResponse<unknown>(uploaded);
   return `${SUPABASE_URL}/storage/v1/object/public/${bucket}/${path}`;
 }
+
+export async function listPublicProjects() {
+  if (!SUPABASE_URL) throw new Error("NEXT_PUBLIC_SUPABASE_URL is missing.");
+  return parseResponse<PortfolioProject[]>(
+    await fetch(`${SUPABASE_URL}/rest/v1/projects?select=*&is_published=eq.true&order=created_at.desc`, {
+      headers: headers(),
+      cache: "no-store",
+    })
+  );
+}
