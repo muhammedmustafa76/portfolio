@@ -97,7 +97,7 @@ export async function saveProject(
   const url = `${SUPABASE_URL}/rest/v1/projects${editing ? `?id=eq.${encodeURIComponent(String(id))}` : ""}`;
   const payload: Record<string, unknown> = {
     title: project.title,
-    description: project.description,
+    description: project.description ?? "",
     category: project.category,
     video_url: project.video_url,
     file_url: project.file_url ?? null,
