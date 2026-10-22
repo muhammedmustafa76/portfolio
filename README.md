@@ -23,3 +23,13 @@ Push the project files to GitHub and import the repository into Vercel. The proj
 
 ## Planned next stage
 Supabase Auth, a protected admin dashboard, project database, and media upload/storage. These features are not implemented in this starter yet.
+
+## Environment variables
+Configure these in Vercel Project Settings → Environment Variables:
+
+- `NEXT_PUBLIC_SUPABASE_URL`: the Supabase project URL.
+- `NEXT_PUBLIC_SUPABASE_ANON_KEY`: the Supabase publishable/anon key.
+- `NEXT_PUBLIC_WHATSAPP_NUMBER`: WhatsApp number in international format using digits only (for example, Egypt numbers begin with `20`; do not include `+`, spaces, or dashes).
+
+## Project assets
+The admin dashboard supports image covers and project assets up to 100 MB per file. Supported uploads: JPEG, PNG, WebP, AVIF, MP4, WebM, MOV, MKV, PDF, ZIP, and TXT. Uploaded assets are stored in the public `portfolio-assets` bucket; only upload files intended to be public. Supabase plan quotas and storage bandwidth limits still apply.
