@@ -1,5 +1,5 @@
-const SUPABASE_URL = process.env.NEXT_PUBLIC_SUPABASE_URL;
-const SUPABASE_KEY = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
+const SUPABASE_URL = process.env.NEXT_PUBLIC_SUPABASE_URL?.trim();
+const SUPABASE_KEY = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY?.trim();
 
 export type PortfolioProject = {
   id: number | string;
@@ -18,6 +18,14 @@ export function configReady() {
 
 function headers(token?: string, extra: Record<string, string> = {}) {
   if (!SUPABASE_KEY) throw new Error("NEXT_PUBLIC_SUPABASE_ANON_KEY is missing.");
+  // Browser Headers only accepts byte-range characters. Fail with a clear message
+  // if a copied Vercel value accidentally contains non-ASCII characters.
+  if (/[^\\x20-\\x7E]/.test(SUPABASE_KEY)) {
+    throw new Error("مفتاح Supabase في Vercel يحتوي على حروف أو مسافات غير صالحة. انسخ قيمة anon/publishable من Supabase من جديد بدون علامات اقتباس أو نص إضافي.");
+  }
+  if (token && /[^\\x20-\\x7E]/.test(token)) {
+    throw new Error("جلسة تسجيل الدخول غير صالحة. سجّل الخروج وادخل مرة أخرى.");
+  }
   return {
     apikey: SUPABASE_KEY,
     Authorization: `Bearer ${token || SUPABASE_KEY}`,
