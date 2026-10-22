@@ -63,3 +63,9 @@ a{color:inherit;text-decoration:none}
 @media(prefers-reduced-motion:reduce){
   *,*::before,*::after{scroll-behavior:auto!important;animation-duration:.01ms!important;animation-iteration-count:1!important;transition-duration:.01ms!important}
 }
+
+
+/* Real project cover images supplied from the admin dashboard */
+.project-image-art{position:relative;overflow:hidden;background:#151515}
+.project-image-art img{display:block;width:100%;height:100%;object-fit:cover;transition:transform .6s cubic-bezier(.2,.7,.2,1)}
+.project-card-link:hover .project-image-art img{transform:scale(1.035)}
