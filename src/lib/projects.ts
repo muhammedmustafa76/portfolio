@@ -13,6 +13,8 @@ export type Project = {
   category: ProjectCategory;
   art: "portrait" | "type" | "orbit" | "mono";
   href: string;
+  thumbnail_url?: string | null;
+  video_url?: string | null;
 };
 
 export const categories: ("All Projects" | ProjectCategory)[] = [
