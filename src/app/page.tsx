@@ -98,7 +98,7 @@ export default function Home() {
           <a href="#services">SERVICES <span>02</span></a>
           <a href="#contact">CONTACT <span>03</span></a>
         </nav>
-        <a className="availability" href="#contact"><span className="status-dot" /> VIDEO EDITOR</a>
+        <a className="header-contact" href="#contact">LET’S TALK <ArrowUpRight size={15} /></a>
         <a className="mobile-contact" href="#contact" aria-label="Contact"><ArrowUpRight size={20} /></a>
       </header>
 
@@ -109,11 +109,15 @@ export default function Home() {
           <span className="title-line title-middle reveal">EDITOR<span className="title-outline">.</span></span>
         </h1>
         <div className="hero-bottom reveal">
-          <p>Reels, YouTube, podcasts, ads<br className="desktop-break" /> and cinematic edits.</p>
-          <a href="#work" className="round-link" aria-label="View projects"><ArrowDownRight size={24} /></a>
-          <div className="hero-side-note">EDITING · STORY · MOTION</div>
+          <div className="hero-intro"><p>Reels, YouTube, podcasts, ads and cinematic edits — built around your story.</p><div className="hero-actions"><a href="#work" className="hero-work-link">EXPLORE MY WORK <ArrowDownRight size={17} /></a><a href="#contact" className="hero-contact-link">LET’S TALK <ArrowUpRight size={17} /></a></div></div>
+          <div className="hero-side-note">EDITING · STORY · MOTION<br />BASED IN EGYPT · WORKING WORLDWIDE</div>
         </div>
         <div className="hero-stamp" aria-hidden="true"><span>MUHAMMED<br />MUSTAFA</span><i>↘</i></div>
+      </section>
+
+      <section className="contact-strip" id="contact">
+        <div><span className="eyebrow">HAVE A PROJECT IN MIND?</span><h2>Let’s make it <em>stand out.</em></h2></div>
+        <a className="contact-strip-button" href="https://wa.me/201013531622" target="_blank" rel="noreferrer">CONTACT ON WHATSAPP <ArrowUpRight size={18} /></a>
       </section>
 
       <Ticker />
@@ -167,16 +171,12 @@ export default function Home() {
         </div>
       </section>
 
-      <footer className="footer" id="contact">
+      <footer className="footer" id="site-footer">
         <div className="footer-top"><span className="eyebrow">03 / CONTACT</span><span className="footer-note">VIDEO EDITOR · MUHAMMED MUSTAFA</span></div>
         <h2>HAVE A<br /><span>PROJECT?</span></h2>
-        {process.env.NEXT_PUBLIC_WHATSAPP_NUMBER?.replace(/\\D/g, "") ? (
-          <a className="contact-cta" href={"https://wa.me/" + process.env.NEXT_PUBLIC_WHATSAPP_NUMBER.replace(/\\D/g, "")} target="_blank" rel="noreferrer">
-            CONTACT ON WHATSAPP <ArrowUpRight size={18} />
-          </a>
-        ) : (
-          <p className="contact-note">WhatsApp contact will appear here once the number is configured.</p>
-        )}
+        <a className="contact-cta" href="https://wa.me/201013531622" target="_blank" rel="noreferrer">
+          CONTACT ON WHATSAPP <ArrowUpRight size={18} />
+        </a>
         <div className="footer-bottom"><a className="wordmark" href="#top">MUHAMMED <span>MUSTAFA</span></a><span>VIDEO EDITOR</span><a href="#top" className="back-top">BACK TO TOP ↑</a></div>
       </footer>
     </main>
