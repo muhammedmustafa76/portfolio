@@ -1,29 +1,25 @@
-# Editor Portfolio — Next.js + TypeScript
+# Muhammed Mustafa — Video Editor Portfolio
 
-A responsive, monochrome portfolio starter for a video editor. Includes animated hero, selected-work cards, approach/manifesto section, services and contact footer.
-
-## Requirements
-- Node.js 20.9 or newer
-- npm
+A responsive black-and-white Next.js portfolio with a video-category filter.
 
 ## Run locally
+Requires Node.js 20.9 or newer.
+
 ```bash
 npm install
 npm run dev
 ```
-Open http://localhost:3000
 
-## First edits
-1. Change `EDITOR` in `src/app/page.tsx` to your name/brand.
-2. Replace `hello@example.com` in `src/app/page.tsx` with your contact email.
-3. Update the placeholder projects in `src/lib/projects.ts`.
-4. The current art cards are CSS-based visual placeholders. Real video thumbnails and playback will be added when we connect your media storage.
+Open http://localhost:3000.
 
-## Next build stage
-- Supabase Auth for administrator login
-- Supabase database for project metadata
-- Cloudinary (or another video platform) for media storage/transcoding
-- Protected admin routes and server-side authorization
-- Direct upload flow with progress, validation, and safe deletion
+## Current state
+- Functional category dropdown for Reels & Shorts, YouTube Videos, Podcasts, Commercial Ads, Cinematic Edits, and Motion Design.
+- Responsive monochrome layout with Space Grotesk headings and DM Sans body text.
+- Project cards are explicitly demo layouts, not real client work. Replace them with real video URLs, thumbnails, titles and descriptions before sharing as a finished portfolio.
+- Contact details are intentionally not fabricated; add a real email or social link in `src/app/page.tsx`.
 
-Do not place service-role keys or media API secrets in client-side code. Add real secrets to `.env.local` only and keep that file out of Git.
+## Deploy
+Push the project files to GitHub and import the repository into Vercel. The project uses the Next.js framework preset.
+
+## Planned next stage
+Supabase Auth, a protected admin dashboard, project database, and media upload/storage. These features are not implemented in this starter yet.

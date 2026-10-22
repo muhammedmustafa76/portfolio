@@ -3,7 +3,7 @@ import "./globals.css";
 
 export const metadata: Metadata = {
   title: "Muhammed Mustafa — Video Editor & Motion",
-  description: "Muhammed Mustafa — video editor portfolio featuring social content, podcasts, brand films and motion.",
+  description: "Muhammed Mustafa — video editor portfolio for reels, YouTube, podcasts, commercials and motion design.",
 };
 
 export const viewport: Viewport = {
