@@ -1,5 +1,10 @@
 const SUPABASE_URL = process.env.NEXT_PUBLIC_SUPABASE_URL?.trim();
-const SUPABASE_KEY = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY?.trim();
+// Clean common copy/paste artifacts (quotes, whitespace, and invisible Unicode marks).
+const SUPABASE_KEY = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY
+  ?.replace(/[\\u200B-\\u200D\\uFEFF]/g, "")
+  .trim()
+  .replace(/^(["'])(.*)\\1$/, "$2")
+  .replace(/\\s+/g, "");
 
 export type PortfolioProject = {
   id: number | string;
