@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useMemo, useState } from "react";
-import { ArrowDownRight, ArrowUpRight, Play, Plus, Check } from "lucide-react";
+import { ArrowDownRight, ArrowUpRight, Play, Plus } from "lucide-react";
 import { categories, projects as demoProjects, type Project, type ProjectCategory } from "@/lib/projects";
 import { listPublicProjects, type PortfolioProject } from "@/lib/supabase-rest";
 
