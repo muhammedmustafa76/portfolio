@@ -1,14 +1,17 @@
 "use client";
 
-import { useMemo, useState } from "react";
-import { ArrowDownRight, ArrowUpRight, Play, Plus, Check } from "lucide-react";
-import { categories, projects, type Project, type ProjectCategory } from "@/lib/projects";
+import { useEffect, useMemo, useState } from "react";
+import { ArrowDownRight, ArrowUpRight, Play, Plus } from "lucide-react";
+import { categories, projects as demoProjects, type Project, type ProjectCategory } from "@/lib/projects";
+import { listPublicProjects, type PortfolioProject } from "@/lib/supabase-rest";
 
 function ProjectCard({ project, index }: { project: Project; index: number }) {
   return (
     <article className={`project-card project-card-${index + 1}`}>
-      <a className="project-card-link" href={project.href} aria-label={`${project.title} project details`}>
-        <div className={`project-art art-${project.art}`}>
+      <a className="project-card-link" href={project.video_url || project.href} target={project.video_url ? "_blank" : undefined} rel={project.video_url ? "noreferrer" : undefined} aria-label={`${project.title} project details`}>
+        {project.thumbnail_url ? (
+          <div className="project-art project-image-art"><img src={project.thumbnail_url} alt={project.title} loading="lazy" /><span className="art-play"><Play size={17} fill="currentColor" /></span><span className="art-tag">{project.tag}</span></div>
+        ) : <div className={`project-art art-${project.art}`}>
           <div className="art-grain" />
           <span className="art-index">{String(index + 1).padStart(2, "0")} / PROJECT PREVIEW</span>
           {project.art === "portrait" && (
@@ -19,7 +22,7 @@ function ProjectCard({ project, index }: { project: Project; index: number }) {
           {project.art === "mono" && <div className="mono-shape"><span>PODCAST<br />EDIT.</span></div>}
           <span className="art-play"><Play size={17} fill="currentColor" /></span>
           <span className="art-tag">{project.tag}</span>
-        </div>
+        </div>}
       </a>
       <div className="project-meta">
         <div>
@@ -45,13 +48,45 @@ function Ticker() {
   );
 }
 
+function mapPortfolioProject(project: PortfolioProject, index: number): Project {
+  const category = categories.includes(project.category as ProjectCategory)
+    ? project.category as ProjectCategory
+    : "Reels & Shorts";
+  const artOptions: Project["art"][] = ["type", "mono", "portrait", "orbit"];
+  return {
+    title: project.title,
+    description: project.description || "",
+    tag: category.toUpperCase(),
+    category,
+    art: artOptions[index % artOptions.length],
+    href: project.video_url || "#contact",
+    thumbnail_url: project.thumbnail_url,
+    video_url: project.video_url,
+  };
+}
+
 export default function Home() {
   const [selectedCategory, setSelectedCategory] = useState<"All Projects" | ProjectCategory>("All Projects");
+  const [liveProjects, setLiveProjects] = useState<Project[] | null>(null);
+
+  useEffect(() => {
+    let active = true;
+    listPublicProjects()
+      .then((rows) => {
+        if (active) setLiveProjects(rows.map(mapPortfolioProject));
+      })
+      .catch(() => {
+        // Keep the demo cards visible if Supabase hasn't been configured yet.
+      });
+    return () => { active = false; };
+  }, []);
+
+  const projects = liveProjects ?? demoProjects;
   const visibleProjects = useMemo(
     () => selectedCategory === "All Projects"
       ? projects
       : projects.filter((project) => project.category === selectedCategory),
-    [selectedCategory]
+    [selectedCategory, projects]
   );
 
   return (
@@ -114,7 +149,7 @@ export default function Home() {
             <p>More videos will appear here when they are added.</p>
           </div>
         )}
-        <div className="work-footnote"><span><Plus size={15} /> DEMO CARDS — ADD YOUR REAL VIDEOS</span><span>MUHAMMED MUSTAFA</span></div>
+        <div className="work-footnote"><span><Plus size={15} /> {liveProjects ? "PROJECTS FROM PORTFOLIO ADMIN" : "PORTFOLIO PREVIEW"}</span><span>MUHAMMED MUSTAFA</span></div>
       </section>
 
       <section className="services section-pad" id="services">
