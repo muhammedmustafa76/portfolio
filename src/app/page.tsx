@@ -59,7 +59,7 @@ function mapPortfolioProject(project: PortfolioProject, index: number): Project 
     tag: category.toUpperCase(),
     category,
     art: artOptions[index % artOptions.length],
-    href: project.video_url || "#contact",
+    href: project.file_url || project.video_url || "#contact",
     thumbnail_url: project.thumbnail_url,
     video_url: project.video_url,
   };
@@ -73,7 +73,7 @@ export default function Home() {
     let active = true;
     listPublicProjects()
       .then((rows) => {
-        if (active) setLiveProjects(rows.length ? rows.map(mapPortfolioProject) : null);
+        if (active) setLiveProjects(rows.map(mapPortfolioProject));
       })
       .catch(() => {
         // Keep the demo cards visible if Supabase hasn't been configured yet.
@@ -170,7 +170,13 @@ export default function Home() {
       <footer className="footer" id="contact">
         <div className="footer-top"><span className="eyebrow">03 / CONTACT</span><span className="footer-note">VIDEO EDITOR · MUHAMMED MUSTAFA</span></div>
         <h2>HAVE A<br /><span>PROJECT?</span></h2>
-        <p className="contact-note">Contact details will be added here.</p>
+        {process.env.NEXT_PUBLIC_WHATSAPP_NUMBER?.replace(/\\D/g, "") ? (
+          <a className="contact-cta" href={"https://wa.me/" + process.env.NEXT_PUBLIC_WHATSAPP_NUMBER.replace(/\\D/g, "")} target="_blank" rel="noreferrer">
+            CONTACT ON WHATSAPP <ArrowUpRight size={18} />
+          </a>
+        ) : (
+          <p className="contact-note">WhatsApp contact will appear here once the number is configured.</p>
+        )}
         <div className="footer-bottom"><a className="wordmark" href="#top">MUHAMMED <span>MUSTAFA</span></a><span>VIDEO EDITOR</span><a href="#top" className="back-top">BACK TO TOP ↑</a></div>
       </footer>
     </main>
