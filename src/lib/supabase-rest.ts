@@ -8,6 +8,7 @@ export type PortfolioProject = {
   category: string;
   video_url: string | null;
   thumbnail_url: string | null;
+  published?: boolean;
   created_at?: string;
 };
 
@@ -34,9 +35,24 @@ async function parseResponse<T>(response: Response): Promise<T> {
   return data as T;
 }
 
+// The existing Supabase schema uses cover_url + published, so translate them
+// to the UI's thumbnail_url field rather than creating a second set of columns.
+function normalizeProject(row: any): PortfolioProject {
+  return {
+    id: row.id,
+    title: row.title,
+    description: row.description ?? "",
+    category: row.category,
+    video_url: row.video_url ?? null,
+    thumbnail_url: row.cover_url ?? row.thumbnail_url ?? null,
+    published: row.published ?? row.is_published ?? true,
+    created_at: row.created_at,
+  };
+}
+
 export async function signIn(email: string, password: string) {
   if (!SUPABASE_URL) throw new Error("NEXT_PUBLIC_SUPABASE_URL is missing.");
-  return parseResponse<{access_token: string; refresh_token: string; user: {email?: string}}>(
+  return parseResponse<{access_token: string; refresh_token: string; user: {id: string; email?: string}}>(
     await fetch(`${SUPABASE_URL}/auth/v1/token?grant_type=password`, {
       method: "POST",
       headers: headers(undefined, { "Content-Type": "application/json" }),
@@ -47,32 +63,42 @@ export async function signIn(email: string, password: string) {
 
 export async function listProjects(token?: string) {
   if (!SUPABASE_URL) throw new Error("NEXT_PUBLIC_SUPABASE_URL is missing.");
-  return parseResponse<PortfolioProject[]>(
+  const rows = await parseResponse<any[]>(
     await fetch(`${SUPABASE_URL}/rest/v1/projects?select=*&order=created_at.desc`, {
       headers: headers(token),
       cache: "no-store",
     })
   );
+  return rows.map(normalizeProject);
 }
 
 export async function saveProject(
-  project: Omit<PortfolioProject, "id" | "created_at">,
+  project: Omit<PortfolioProject, "id" | "created_at" | "published">,
   token: string,
+  userId: string,
   id?: string | number
 ) {
   if (!SUPABASE_URL) throw new Error("NEXT_PUBLIC_SUPABASE_URL is missing.");
   const editing = id !== undefined;
   const url = `${SUPABASE_URL}/rest/v1/projects${editing ? `?id=eq.${encodeURIComponent(String(id))}` : ""}`;
-  return parseResponse<PortfolioProject[]>(
+  const payload: Record<string, unknown> = {
+    title: project.title,
+    description: project.description,
+    category: project.category,
+    video_url: project.video_url,
+    cover_url: project.thumbnail_url,
+  };
+  if (!editing) payload.user_id = userId;
+  return parseResponse<any[]>(
     await fetch(url, {
       method: editing ? "PATCH" : "POST",
       headers: headers(token, {
         "Content-Type": "application/json",
         Prefer: "return=representation",
       }),
-      body: JSON.stringify(project),
+      body: JSON.stringify(payload),
     })
-  );
+  ).then((rows) => rows.map(normalizeProject));
 }
 
 export async function deleteProject(id: string | number, token: string) {
@@ -85,10 +111,10 @@ export async function deleteProject(id: string | number, token: string) {
   );
 }
 
-export async function uploadCover(file: File, token: string) {
+export async function uploadCover(file: File, token: string, userId: string) {
   if (!SUPABASE_URL) throw new Error("NEXT_PUBLIC_SUPABASE_URL is missing.");
   const safeName = file.name.toLowerCase().replace(/[^a-z0-9._-]+/g, "-");
-  const path = `${Date.now()}-${safeName}`;
+  const path = `${userId}/${Date.now()}-${safeName}`;
   const bucket = "project-covers";
   const uploaded = await fetch(`${SUPABASE_URL}/storage/v1/object/${bucket}/${path}`, {
     method: "POST",
@@ -104,10 +130,11 @@ export async function uploadCover(file: File, token: string) {
 
 export async function listPublicProjects() {
   if (!SUPABASE_URL) throw new Error("NEXT_PUBLIC_SUPABASE_URL is missing.");
-  return parseResponse<PortfolioProject[]>(
-    await fetch(`${SUPABASE_URL}/rest/v1/projects?select=*&is_published=eq.true&order=created_at.desc`, {
+  const rows = await parseResponse<any[]>(
+    await fetch(`${SUPABASE_URL}/rest/v1/projects?select=*&published=eq.true&order=created_at.desc`, {
       headers: headers(),
       cache: "no-store",
     })
   );
+  return rows.map(normalizeProject);
 }
