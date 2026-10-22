@@ -73,7 +73,7 @@ export default function Home() {
     let active = true;
     listPublicProjects()
       .then((rows) => {
-        if (active) setLiveProjects(rows.map(mapPortfolioProject));
+        if (active) setLiveProjects(rows.length ? rows.map(mapPortfolioProject) : null);
       })
       .catch(() => {
         // Keep the demo cards visible if Supabase hasn't been configured yet.
