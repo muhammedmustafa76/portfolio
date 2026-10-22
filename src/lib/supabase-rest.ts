@@ -12,6 +12,7 @@ export type PortfolioProject = {
   description: string | null;
   category: string;
   video_url: string | null;
+  file_url?: string | null;
   thumbnail_url: string | null;
   published?: boolean;
   created_at?: string;
@@ -56,6 +57,7 @@ function normalizeProject(row: any): PortfolioProject {
     description: row.description ?? "",
     category: row.category,
     video_url: row.video_url ?? null,
+    file_url: row.file_url ?? null,
     thumbnail_url: row.cover_url ?? row.thumbnail_url ?? null,
     published: row.published ?? row.is_published ?? true,
     created_at: row.created_at,
@@ -98,6 +100,7 @@ export async function saveProject(
     description: project.description,
     category: project.category,
     video_url: project.video_url,
+    file_url: project.file_url ?? null,
     cover_url: project.thumbnail_url,
   };
   if (!editing) payload.user_id = userId;
@@ -123,21 +126,32 @@ export async function deleteProject(id: string | number, token: string) {
   );
 }
 
-export async function uploadCover(file: File, token: string, userId: string) {
+const MAX_UPLOAD_BYTES = 100 * 1024 * 1024;
+const ALLOWED_UPLOAD_TYPES = new Set([
+  "image/jpeg", "image/png", "image/webp", "image/avif",
+  "video/mp4", "video/webm", "video/quicktime", "video/x-matroska",
+  "application/pdf", "application/zip", "application/x-zip-compressed", "text/plain",
+]);
+
+export async function uploadAsset(file: File, token: string, userId: string) {
   if (!SUPABASE_URL) throw new Error("NEXT_PUBLIC_SUPABASE_URL is missing.");
-  const safeName = file.name.toLowerCase().replace(/[^a-z0-9._-]+/g, "-");
-  const path = `${userId}/${Date.now()}-${safeName}`;
-  const bucket = "project-covers";
-  const uploaded = await fetch(`${SUPABASE_URL}/storage/v1/object/${bucket}/${path}`, {
+  if (file.size > MAX_UPLOAD_BYTES) throw new Error("الحد الأقصى لحجم الملف 100 ميجابايت.");
+  if (!ALLOWED_UPLOAD_TYPES.has(file.type)) throw new Error("نوع الملف غير مدعوم. استخدم صورة أو فيديو MP4/WebM/MOV/MKV أو PDF أو ZIP أو TXT.");
+  const safeName = file.name.toLowerCase().replace(/[^a-z0-9._-]+/g, "-").slice(-120) || "upload";
+  const path = userId + "/" + Date.now() + "-" + safeName;
+  const bucket = "portfolio-assets";
+  const uploaded = await fetch(SUPABASE_URL + "/storage/v1/object/" + bucket + "/" + path, {
     method: "POST",
-    headers: headers(token, {
-      "Content-Type": file.type || "application/octet-stream",
-      "x-upsert": "true",
-    }),
+    headers: headers(token, { "Content-Type": file.type, "x-upsert": "false" }),
     body: file,
   });
   await parseResponse<unknown>(uploaded);
-  return `${SUPABASE_URL}/storage/v1/object/public/${bucket}/${path}`;
+  return SUPABASE_URL + "/storage/v1/object/public/" + bucket + "/" + path;
+}
+
+export async function uploadCover(file: File, token: string, userId: string) {
+  if (!file.type.startsWith("image/")) throw new Error("ملف الغلاف لازم يكون صورة.");
+  return uploadAsset(file, token, userId);
 }
 
 export async function listPublicProjects() {
