@@ -20,10 +20,10 @@ function headers(token?: string, extra: Record<string, string> = {}) {
   if (!SUPABASE_KEY) throw new Error("NEXT_PUBLIC_SUPABASE_ANON_KEY is missing.");
   // Browser Headers only accepts byte-range characters. Fail with a clear message
   // if a copied Vercel value accidentally contains non-ASCII characters.
-  if (/[^\\x20-\\x7E]/.test(SUPABASE_KEY)) {
+  if (/[^\x20-\x7E]/.test(SUPABASE_KEY)) {
     throw new Error("مفتاح Supabase في Vercel يحتوي على حروف أو مسافات غير صالحة. انسخ قيمة anon/publishable من Supabase من جديد بدون علامات اقتباس أو نص إضافي.");
   }
-  if (token && /[^\\x20-\\x7E]/.test(token)) {
+  if (token && /[^\x20-\x7E]/.test(token)) {
     throw new Error("جلسة تسجيل الدخول غير صالحة. سجّل الخروج وادخل مرة أخرى.");
   }
   return {
