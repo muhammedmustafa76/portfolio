@@ -9,6 +9,7 @@ const blankForm = { title: "", description: "", category: categories[0], video_u
 
 export default function AdminPage() {
   const [token, setToken] = useState("");
+  const [userId, setUserId] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [projects, setProjects] = useState<PortfolioProject[]>([]);
@@ -21,6 +22,8 @@ export default function AdminPage() {
   useEffect(() => {
     const saved = window.localStorage.getItem("portfolio_admin_token");
     if (saved) setToken(saved);
+    const savedUserId = window.localStorage.getItem("portfolio_admin_user_id");
+    if (savedUserId) setUserId(savedUserId);
   }, []);
 
   useEffect(() => {
@@ -40,6 +43,8 @@ export default function AdminPage() {
     try {
       const session = await signIn(email.trim(), password);
       window.localStorage.setItem("portfolio_admin_token", session.access_token);
+      window.localStorage.setItem("portfolio_admin_user_id", session.user.id);
+      setUserId(session.user.id);
       setToken(session.access_token);
       setPassword("");
       setMessage("تم تسجيل الدخول.");
@@ -71,7 +76,7 @@ export default function AdminPage() {
     if (!file || !token) return;
     setBusy(true); setError(""); setMessage("");
     try {
-      const url = await uploadCover(file, token);
+      const url = await uploadCover(file, token, userId);
       setForm((current) => ({ ...current, thumbnail_url: url }));
       setMessage("اترفعت صورة الغلاف بنجاح.");
     } catch (e) {
@@ -90,7 +95,7 @@ export default function AdminPage() {
         category: form.category,
         video_url: form.video_url.trim() || null,
         thumbnail_url: form.thumbnail_url.trim() || null,
-      }, token, editingId);
+      }, token, userId, editingId);
       setProjects(await listProjects(token));
       resetForm();
       setMessage(editingId === undefined ? "تمت إضافة المشروع." : "تم تحديث المشروع.");
@@ -113,7 +118,9 @@ export default function AdminPage() {
 
   function logout() {
     window.localStorage.removeItem("portfolio_admin_token");
-    setToken(""); setProjects([]); resetForm(); setMessage("تم تسجيل الخروج.");
+    window.localStorage.removeItem("portfolio_admin_user_id");
+    setToken("");
+    setUserId(""); setProjects([]); resetForm(); setMessage("تم تسجيل الخروج.");
   }
 
   return (
