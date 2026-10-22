@@ -1,11 +1,11 @@
 "use client";
 
 import { FormEvent, useEffect, useState } from "react";
-import { configReady, deleteProject, listProjects, PortfolioProject, saveProject, signIn, uploadCover } from "@/lib/supabase-rest";
+import { configReady, deleteProject, listProjects, PortfolioProject, saveProject, signIn, uploadAsset, uploadCover } from "@/lib/supabase-rest";
 
 const categories = ["Reels & Shorts", "YouTube Videos", "Podcasts", "Commercial Ads", "Cinematic Edits", "Motion Design"];
 
-const blankForm = { title: "", description: "", category: categories[0], video_url: "", thumbnail_url: "" };
+const blankForm = { title: "", description: "", category: categories[0], video_url: "", thumbnail_url: "", file_url: "" };
 
 export default function AdminPage() {
   const [token, setToken] = useState("");
@@ -61,6 +61,7 @@ export default function AdminPage() {
       category: project.category || categories[0],
       video_url: project.video_url || "",
       thumbnail_url: project.thumbnail_url || "",
+      file_url: project.file_url || "",
     });
     setMessage("");
     setError("");
@@ -84,6 +85,26 @@ export default function AdminPage() {
     } finally { setBusy(false); }
   }
 
+  async function handleAssetUpload(file?: File) {
+    if (!file || !token) return;
+    setBusy(true); setError(""); setMessage("");
+    try {
+      const url = await uploadAsset(file, token, userId);
+      if (file.type.startsWith("image/")) {
+        setForm((current) => ({ ...current, thumbnail_url: url }));
+        setMessage("تم رفع الصورة واستخدامها كغلاف.");
+      } else if (file.type.startsWith("video/")) {
+        setForm((current) => ({ ...current, file_url: url, video_url: url }));
+        setMessage("تم رفع الفيديو. سيظهر كرابط للمشاهدة.");
+      } else {
+        setForm((current) => ({ ...current, file_url: url }));
+        setMessage("تم رفع الملف وإرفاقه بالمشروع.");
+      }
+    } catch (e) {
+      setError(e instanceof Error ? e.message : "فشل رفع الملف.");
+    } finally { setBusy(false); }
+  }
+
   async function handleSave(event: FormEvent) {
     event.preventDefault();
     if (!token) return;
@@ -94,6 +115,7 @@ export default function AdminPage() {
         description: form.description.trim() || null,
         category: form.category,
         video_url: form.video_url.trim() || null,
+        file_url: form.file_url.trim() || null,
         thumbnail_url: form.thumbnail_url.trim() || null,
       }, token, userId, editingId);
       setProjects(await listProjects(token));
@@ -192,7 +214,8 @@ export default function AdminPage() {
                 <div className="admin-field"><label htmlFor="project-category">التصنيف *</label><select id="project-category" value={form.category} onChange={(e) => setForm({ ...form, category: e.target.value })}>{categories.map((category) => <option key={category}>{category}</option>)}</select></div>
                 <div className="admin-field full"><label htmlFor="project-description">الوصف</label><textarea id="project-description" value={form.description} onChange={(e) => setForm({ ...form, description: e.target.value })} /></div>
                 <div className="admin-field full"><label htmlFor="project-video">رابط الفيديو (YouTube / Vimeo / MP4)</label><input id="project-video" type="url" placeholder="https://..." value={form.video_url} onChange={(e) => setForm({ ...form, video_url: e.target.value })} /></div>
-                <div className="admin-field full"><label htmlFor="project-cover">صورة الغلاف (رابط أو ارفع ملفًا)</label><input id="project-cover" type="url" placeholder="https://..." value={form.thumbnail_url} onChange={(e) => setForm({ ...form, thumbnail_url: e.target.value })} /><input aria-label="رفع صورة الغلاف" type="file" accept="image/*" onChange={(e) => handleUpload(e.target.files?.[0])} /></div>
+                <div className="admin-field full"><label htmlFor="project-cover">صورة الغلاف (رابط أو ارفع صورة)</label><input id="project-cover" type="url" placeholder="https://..." value={form.thumbnail_url} onChange={(e) => setForm({ ...form, thumbnail_url: e.target.value })} /><input aria-label="رفع صورة الغلاف" type="file" accept="image/jpeg,image/png,image/webp,image/avif" onChange={(e) => handleUpload(e.target.files?.[0])} /></div>
+                <div className="admin-field full"><label htmlFor="project-asset">رفع فيديو أو ملف للمشروع (حتى 100 ميجابايت)</label><input id="project-asset" type="file" accept="image/jpeg,image/png,image/webp,image/avif,video/mp4,video/webm,video/quicktime,video/x-matroska,application/pdf,application/zip,application/x-zip-compressed,text/plain" onChange={(e) => handleAssetUpload(e.target.files?.[0])} /><input aria-label="رابط الملف المرفق" type="url" placeholder="أو ضع رابط ملف موجود https://..." value={form.file_url} onChange={(e) => setForm({ ...form, file_url: e.target.value })} /></div>
               </div>
               {form.thumbnail_url && <p><img src={form.thumbnail_url} alt="معاينة الغلاف" style={{ maxWidth:220, maxHeight:140, objectFit:"cover", borderRadius:8 }} /></p>}
               <div className="admin-actions"><button className="admin-btn" disabled={busy}>{busy ? "جاري الحفظ..." : editingId === undefined ? "حفظ المشروع" : "حفظ التعديلات"}</button>{editingId !== undefined && <button type="button" className="admin-btn secondary" onClick={resetForm}>إلغاء التعديل</button>}</div>
