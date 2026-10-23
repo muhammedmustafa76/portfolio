@@ -226,9 +226,15 @@ export default function AdminPage() {
               <div className="admin-actions"><button className="admin-btn" disabled={busy}>{busy ? "جاري الحفظ..." : editingId === undefined ? "حفظ المشروع" : "حفظ التعديلات"}</button>{editingId !== undefined && <button type="button" className="admin-btn secondary" onClick={resetForm}>إلغاء التعديل</button>}</div>
             </form>
           </section>
+          <section className="admin-dashboard-stats" aria-label="إحصائيات المشاريع">
+            <div className="admin-stat"><span>إجمالي المشاريع</span><strong>{projects.length}</strong></div>
+            <div className="admin-stat"><span>التصنيفات المستخدمة</span><strong>{categoryCount}</strong></div>
+            <div className="admin-stat"><span>مشاريع بها فيديو أو ملف</span><strong>{projectsWithVideo}</strong></div>
+          </section>
           <section className="admin-panel">
-            <h2>المشاريع الحالية ({projects.length})</h2>
-            {projects.length === 0 ? <p className="admin-sub">لا توجد مشاريع حتى الآن.</p> : <div className="admin-projects">{projects.map((project) => <article className="admin-project" key={project.id}>{project.thumbnail_url ? <img src={project.thumbnail_url} alt="" /> : <div style={{width:90,height:64,background:"#222",borderRadius:7}} />}<div className="admin-project-info"><strong>{project.title}</strong><span>{project.category}</span><span style={{display:"block",marginTop:5,color:project.video_url || project.file_url ? "#d6ff3f" : "#999"}}>{project.video_url || project.file_url ? "● محتوى مرفق" : "○ بدون رابط فيديو/ملف"}</span></div><div className="admin-actions"><button className="admin-btn secondary" onClick={() => startEdit(project)}>تعديل</button><button className="admin-btn danger" onClick={() => handleDelete(project.id)} disabled={busy}>حذف</button></div></article>)}</div>}
+            <h2>المشاريع الحالية ({filteredProjects.length} من {projects.length})</h2>
+            <input className="admin-search" type="search" aria-label="البحث في المشاريع" placeholder="ابحث باسم المشروع أو التصنيف أو الوصف..." value={projectSearch} onChange={(e) => setProjectSearch(e.target.value)} />
+            {filteredProjects.length === 0 ? <p className="admin-sub">{projects.length === 0 ? "لا توجد مشاريع حتى الآن." : "مفيش مشاريع مطابقة للبحث."}</p> : <div className="admin-projects">{filteredProjects.map((project) => <article className="admin-project" key={project.id}>{project.thumbnail_url ? <img src={project.thumbnail_url} alt="" /> : <div style={{width:90,height:64,background:"#222",borderRadius:7}} />}<div className="admin-project-info"><strong>{project.title}</strong><span>{project.category}</span><span style={{display:"block",marginTop:5,color:project.video_url || project.file_url ? "#d6ff3f" : "#999"}}>{project.video_url || project.file_url ? "● محتوى مرفق" : "○ بدون رابط فيديو/ملف"}</span></div><div className="admin-actions"><button className="admin-btn secondary" onClick={() => startEdit(project)}>تعديل</button><button className="admin-btn danger" onClick={() => handleDelete(project.id)} disabled={busy}>حذف</button></div></article>)}</div>}
           </section>
         </>
       )}
