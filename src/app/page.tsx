@@ -156,6 +156,22 @@ export default function Home() {
         <div className="work-footnote"><span><Plus size={15} /> {liveProjects ? "PROJECTS FROM PORTFOLIO ADMIN" : "PORTFOLIO PREVIEW"}</span><span>MUHAMMED MUSTAFA</span></div>
       </section>
 
+      <section className="manifesto" aria-labelledby="manifesto-title">
+        <div className="manifesto-top">
+          <span className="eyebrow">THE THINKING BEHIND THE CUT</span>
+          <span className="manifesto-number">NOT JUST CUTS.<br />A CLEAR POINT OF VIEW.</span>
+        </div>
+        <h2 className="manifesto-copy" id="manifesto-title">
+          GOOD EDITING<br />
+          ISN’T JUST <span>SEEN.</span><br />
+          IT’S <span>FELT.</span>
+        </h2>
+        <div className="manifesto-bottom">
+          <p>Every frame has a job. Every cut should move the story forward. I bring rhythm, clarity and intention to videos people actually want to keep watching.</p>
+          <a className="text-link" href="https://wa.me/201013531622" target="_blank" rel="noreferrer">HAVE A STORY TO TELL? <ArrowUpRight size={16} /></a>
+        </div>
+      </section>
+
       <section className="services section-pad" id="services">
         <span className="eyebrow">02 / SERVICES</span>
         <div className="service-list">
