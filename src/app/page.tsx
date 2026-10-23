@@ -200,6 +200,12 @@ export default function Home() {
         </div>
       </section>
 
+      <a className="floating-whatsapp" href="https://wa.me/201013531622" target="_blank" rel="noreferrer" aria-label="Chat with Muhammed on WhatsApp">
+        <MessageCircle size={21} strokeWidth={2.4} />
+        <span>LET’S TALK</span>
+        <ArrowUpRight size={16} />
+      </a>
+
       <footer className="footer" id="site-footer">
         <div className="footer-top"><span className="eyebrow">03 / CONTACT</span><span className="footer-note">VIDEO EDITOR · MUHAMMED MUSTAFA</span></div>
         <h2>HAVE A<br /><span>PROJECT?</span></h2>
