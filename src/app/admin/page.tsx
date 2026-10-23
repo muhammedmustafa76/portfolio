@@ -13,6 +13,7 @@ export default function AdminPage() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [projects, setProjects] = useState<PortfolioProject[]>([]);
+  const [projectSearch, setProjectSearch] = useState("");
   const [form, setForm] = useState(blankForm);
   const [editingId, setEditingId] = useState<string | number | undefined>();
   const [busy, setBusy] = useState(false);
@@ -138,6 +139,10 @@ export default function AdminPage() {
     finally { setBusy(false); }
   }
 
+  const filteredProjects = projects.filter((project) => `${project.title} ${project.category} ${project.description || ""}`.toLowerCase().includes(projectSearch.trim().toLowerCase()));
+  const categoryCount = new Set(projects.map((project) => project.category)).size;
+  const projectsWithVideo = projects.filter((project) => Boolean(project.video_url || project.file_url)).length;
+
   function logout() {
     window.localStorage.removeItem("portfolio_admin_token");
     window.localStorage.removeItem("portfolio_admin_user_id");
@@ -171,14 +176,14 @@ export default function AdminPage() {
         .admin-btn:disabled { opacity:.5; cursor:wait; }
         .admin-msg { border-radius:10px; padding:12px 14px; margin:14px 0; background:#15251a; color:#a8f0ba; overflow-wrap:anywhere; }
         .admin-error { background:#2b1717; color:#ffb7b7; }
-        .admin-projects { display:grid; gap:12px; }
+        .admin-dashboard-stats { display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); gap:12px; margin:0 0 24px; }\n        .admin-stat { padding:18px; border:1px solid #292929; border-radius:14px; background:linear-gradient(145deg,#151515,#0d0d0d); }\n        .admin-stat span { display:block; color:#999; font-size:11px; margin-bottom:10px; }\n        .admin-stat strong { display:block; color:#d6ff3f; font-size:clamp(25px,4vw,36px); letter-spacing:-1px; }\n        .admin-search { width:100%; border:1px solid #333; border-radius:10px; padding:13px 14px; background:#080808; color:#fff; font:inherit; margin-bottom:14px; }\n        .admin-projects { display:grid; gap:12px; }
         .admin-project { display:flex; align-items:center; gap:16px; padding:14px; border:1px solid #292929; border-radius:12px; }
         .admin-project img { width:90px; height:64px; object-fit:cover; border-radius:7px; background:#222; }
         .admin-project-info { flex:1; min-width:0; }
         .admin-project-info strong { display:block; margin-bottom:5px; overflow-wrap:anywhere; }
         .admin-project-info span { color:#999; font-size:12px; }
         .admin-login { max-width:480px; margin:9vh auto; }
-        @media(max-width:650px) { .admin-form-grid { grid-template-columns:1fr; } .admin-field.full { grid-column:auto; } .admin-project { align-items:flex-start; flex-wrap:wrap; } .admin-project-info { min-width:calc(100% - 110px); } }
+        @media(max-width:650px) { .admin-dashboard-stats { grid-template-columns:1fr; } .admin-form-grid { grid-template-columns:1fr; } .admin-field.full { grid-column:auto; } .admin-project { align-items:flex-start; flex-wrap:wrap; } .admin-project-info { min-width:calc(100% - 110px); } }
       `}</style>
 
       <div className="admin-top">
@@ -223,7 +228,7 @@ export default function AdminPage() {
           </section>
           <section className="admin-panel">
             <h2>المشاريع الحالية ({projects.length})</h2>
-            {projects.length === 0 ? <p className="admin-sub">لا توجد مشاريع حتى الآن.</p> : <div className="admin-projects">{projects.map((project) => <article className="admin-project" key={project.id}>{project.thumbnail_url ? <img src={project.thumbnail_url} alt="" /> : <div style={{width:90,height:64,background:"#222",borderRadius:7}} />}<div className="admin-project-info"><strong>{project.title}</strong><span>{project.category}</span></div><div className="admin-actions"><button className="admin-btn secondary" onClick={() => startEdit(project)}>تعديل</button><button className="admin-btn danger" onClick={() => handleDelete(project.id)} disabled={busy}>حذف</button></div></article>)}</div>}
+            {projects.length === 0 ? <p className="admin-sub">لا توجد مشاريع حتى الآن.</p> : <div className="admin-projects">{projects.map((project) => <article className="admin-project" key={project.id}>{project.thumbnail_url ? <img src={project.thumbnail_url} alt="" /> : <div style={{width:90,height:64,background:"#222",borderRadius:7}} />}<div className="admin-project-info"><strong>{project.title}</strong><span>{project.category}</span><span style={{display:"block",marginTop:5,color:project.video_url || project.file_url ? "#d6ff3f" : "#999"}}>{project.video_url || project.file_url ? "● محتوى مرفق" : "○ بدون رابط فيديو/ملف"}</span></div><div className="admin-actions"><button className="admin-btn secondary" onClick={() => startEdit(project)}>تعديل</button><button className="admin-btn danger" onClick={() => handleDelete(project.id)} disabled={busy}>حذف</button></div></article>)}</div>}
           </section>
         </>
       )}
