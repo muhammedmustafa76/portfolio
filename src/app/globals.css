@@ -249,3 +249,63 @@ body{background:var(--bg);color:var(--white);overflow-x:hidden}
  .contact-strip-button{border-color:#686c5e}
 }
 @media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}}
+
+
+/* High-visibility WhatsApp contact actions */
+.contact-strip-button,
+.contact-cta{
+  position:relative;
+  isolation:isolate;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  gap:13px;
+  font-weight:800;
+  letter-spacing:.045em;
+  transition:transform .22s ease,box-shadow .22s ease,background .22s ease;
+}
+.contact-strip-button{
+  min-height:58px;
+  min-width:280px;
+  padding:17px 22px;
+  color:#101a12;
+  background:#25D366;
+  border:1px solid #25D366;
+  box-shadow:0 8px 28px #25d36624;
+}
+.contact-strip-button svg:first-child{flex:0 0 auto}
+.contact-strip-button:hover{
+  color:#07150b;
+  background:#48f080;
+  border-color:#48f080;
+  transform:translateY(-3px);
+  box-shadow:0 12px 34px #25d36645;
+}
+.contact-strip-button:focus-visible,
+.contact-cta:focus-visible{outline:3px solid #fff;outline-offset:4px}
+.footer .contact-cta{
+  width:fit-content;
+  min-width:min(100%,330px);
+  min-height:60px;
+  padding:17px 20px;
+  background:#101a12;
+  border:1px solid #101a12;
+  color:#f4f2e9;
+  box-shadow:0 8px 24px #101a1220;
+}
+.footer .contact-cta svg:first-child{color:#25D366;flex:0 0 auto}
+.footer .contact-cta:hover{
+  color:#101a12;
+  background:#fff;
+  border-color:#fff;
+  transform:translateY(-3px);
+  box-shadow:0 12px 30px #101a1228;
+}
+.contact-strip-button svg:last-child,.contact-cta svg:last-child{margin-left:auto}
+@media(max-width:760px){
+ .contact-strip-button{min-height:56px;padding:15px 16px;font-size:10px}
+ .footer .contact-cta{width:100%;min-width:0;justify-content:flex-start;font-size:10px}
+}
+@media(prefers-reduced-motion:reduce){
+ .contact-strip-button,.contact-cta{transition:none}
+}
