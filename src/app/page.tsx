@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useMemo, useState } from "react";
-import { ArrowDownRight, ArrowUpRight, Play, Plus } from "lucide-react";
+import { ArrowDownRight, ArrowUpRight, Play, Plus, MessageCircle } from "lucide-react";
 import { categories, projects as demoProjects, type Project, type ProjectCategory } from "@/lib/projects";
 import { listPublicProjects, type PortfolioProject } from "@/lib/supabase-rest";
 
@@ -117,7 +117,7 @@ export default function Home() {
 
       <section className="contact-strip" id="contact">
         <div><span className="eyebrow">HAVE A PROJECT IN MIND?</span><h2>Let’s make it <em>stand out.</em></h2></div>
-        <a className="contact-strip-button" href="https://wa.me/201013531622" target="_blank" rel="noreferrer">CONTACT ON WHATSAPP <ArrowUpRight size={18} /></a>
+        <a className="contact-strip-button" href="https://wa.me/201013531622" target="_blank" rel="noreferrer"><MessageCircle size={19} strokeWidth={2.4} /> <span>CHAT ON WHATSAPP</span> <ArrowUpRight size={18} /></a>
       </section>
 
       <Ticker />
@@ -175,7 +175,7 @@ export default function Home() {
         <div className="footer-top"><span className="eyebrow">03 / CONTACT</span><span className="footer-note">VIDEO EDITOR · MUHAMMED MUSTAFA</span></div>
         <h2>HAVE A<br /><span>PROJECT?</span></h2>
         <a className="contact-cta" href="https://wa.me/201013531622" target="_blank" rel="noreferrer">
-          CONTACT ON WHATSAPP <ArrowUpRight size={18} />
+          <MessageCircle size={20} strokeWidth={2.4} /> <span>LET’S TALK ON WHATSAPP</span> <ArrowUpRight size={18} />
         </a>
         <div className="footer-bottom"><a className="wordmark" href="#top">MUHAMMED <span>MUSTAFA</span></a><span>VIDEO EDITOR</span><a href="#top" className="back-top">BACK TO TOP ↑</a></div>
       </footer>
