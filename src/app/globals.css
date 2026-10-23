@@ -400,3 +400,27 @@ body{background:var(--bg);color:var(--white);overflow-x:hidden}
  .section-heading>p{max-width:100px}
  .project-meta h3{font-size:16px}
 }
+
+
+/* Portfolio cards: more compact gallery sizing */
+.project-grid{
+  grid-template-columns:repeat(3,minmax(0,1fr));
+  gap:clamp(18px,2vw,28px);
+  align-items:start;
+}
+.project-card:nth-child(even){transform:none}
+.project-art{
+  height:auto;
+  aspect-ratio:16/10;
+}
+.project-meta{padding:13px 0;gap:10px}
+.project-meta h3{font-size:clamp(15px,1.25vw,19px)}
+.project-arrow{flex:0 0 32px;width:32px;height:32px}
+@media(max-width:900px){
+  .project-grid{grid-template-columns:repeat(2,minmax(0,1fr));gap:28px 16px}
+  .project-art{aspect-ratio:4/3}
+}
+@media(max-width:420px){
+  .project-grid{grid-template-columns:1fr;gap:24px}
+  .project-art{aspect-ratio:16/10;max-height:none}
+}
