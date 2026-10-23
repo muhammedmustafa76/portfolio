@@ -327,3 +327,13 @@ body{background:var(--bg);color:var(--white);overflow-x:hidden}
 .process-card p{font-size:12px;line-height:1.8;color:#9b9d93;max-width:290px;margin:0}
 @media(max-width:760px){.process-heading{grid-template-columns:1fr;gap:22px}.process-heading .eyebrow{margin-bottom:4px}.process-heading h2{font-size:clamp(55px,13vw,88px)}.process-grid{grid-template-columns:1fr}.process-card{min-height:220px;padding:22px}.process-symbol{margin:28px 0 20px}}
 @media(prefers-reduced-motion:reduce){.process-card{transition:none}}
+
+
+/* Portfolio usability pass: uncropped artwork and persistent contact */
+.project-image-art{display:flex;align-items:center;justify-content:center;overflow:hidden;background:radial-gradient(ellipse at center,#25291f 0%,#11130f 75%)}
+.project-image-art img{width:100%;height:100%;object-fit:contain!important;object-position:center;background:transparent;padding:clamp(4px,1vw,12px);box-sizing:border-box}
+.floating-whatsapp{position:fixed;right:22px;bottom:22px;z-index:50;display:flex;align-items:center;gap:10px;min-height:52px;padding:0 17px;border-radius:999px;background:#25d366;color:#07150b;border:1px solid #25d366;box-shadow:0 10px 34px #0008,0 0 0 5px #25d36618;font:800 10px/1 var(--mono);letter-spacing:.06em;text-decoration:none;transition:transform .2s ease,box-shadow .2s ease,background .2s ease}
+.floating-whatsapp:hover{transform:translateY(-3px);background:#48f080;box-shadow:0 14px 38px #0009,0 0 0 7px #25d36622}
+.floating-whatsapp:focus-visible{outline:3px solid #fff;outline-offset:4px}
+@media(max-width:760px){.floating-whatsapp{right:14px;bottom:14px;min-height:48px;padding:0 14px;gap:8px}.floating-whatsapp span{font-size:9px}}
+@media(prefers-reduced-motion:reduce){.floating-whatsapp{transition:none}}
