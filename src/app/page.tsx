@@ -172,6 +172,19 @@ export default function Home() {
         </div>
       </section>
 
+      <section className="process-section section-pad" aria-labelledby="process-title">
+        <div className="process-heading">
+          <span className="eyebrow">THE METHOD / FROM RAW TO REMARKABLE</span>
+          <h2 id="process-title">MADE WITH<br /><em>INTENTION.</em></h2>
+          <p>Good edits don't happen by accident. Every decision has a reason — from the first frame to the final sound.</p>
+        </div>
+        <div className="process-grid">
+          <article className="process-card"><span className="process-index">01 — FIND THE STORY</span><div className="process-symbol">↗</div><h3>Start with the why.</h3><p>We get clear on the message, audience and feeling before the timeline gets crowded.</p></article>
+          <article className="process-card"><span className="process-index">02 — BUILD THE RHYTHM</span><div className="process-symbol">⌁</div><h3>Make every second count.</h3><p>Precise cuts, purposeful pacing, sound and motion that keep people watching.</p></article>
+          <article className="process-card"><span className="process-index">03 — MAKE IT LAND</span><div className="process-symbol">✳</div><h3>Finish with purpose.</h3><p>A polished final piece shaped for its platform and ready to meet the world.</p></article>
+        </div>
+      </section>
+
       <section className="services section-pad" id="services">
         <span className="eyebrow">02 / SERVICES</span>
         <div className="service-list">
