@@ -337,3 +337,66 @@ body{background:var(--bg);color:var(--white);overflow-x:hidden}
 .floating-whatsapp:focus-visible{outline:3px solid #fff;outline-offset:4px}
 @media(max-width:760px){.floating-whatsapp{right:14px;bottom:14px;min-height:48px;padding:0 14px;gap:8px}.floating-whatsapp span{font-size:9px}}
 @media(prefers-reduced-motion:reduce){.floating-whatsapp{transition:none}}
+
+
+/* Art direction v2 — stronger editorial hero, richer cards, tighter rhythm */
+.hero{min-height:min(820px,calc(100svh - 72px));display:flex;flex-direction:column;justify-content:center;padding-top:clamp(68px,9vh,116px);padding-bottom:clamp(54px,8vh,90px);background:radial-gradient(ellipse at 76% 34%,#d6ff3f0c 0,transparent 32%),linear-gradient(120deg,#101110 0%,#101110 60%,#141711 100%)}
+.hero-kicker{display:flex;align-items:center;gap:12px;letter-spacing:.14em}
+.kicker-line{display:inline-block;width:clamp(26px,5vw,70px);height:1px;background:#d6ff3f66}
+.hero-title{font-size:clamp(92px,17vw,245px);line-height:.76;margin:0;max-width:1200px}
+.title-line{display:block}
+.title-middle{margin-top:.13em;margin-left:12%;white-space:nowrap}
+.title-outline{-webkit-text-stroke:2px var(--acid);color:transparent}
+.hero-bottom{margin-top:clamp(48px,8vh,92px);align-items:end}
+.hero-intro>p{font-size:clamp(15px,1.35vw,19px);line-height:1.65}
+.hero-actions{gap:12px}
+.hero-work-link,.hero-contact-link{min-height:46px}
+.hero-stamp{width:clamp(78px,8vw,112px);height:clamp(78px,8vw,112px);display:flex;align-items:center;justify-content:center;flex-direction:column;gap:8px;top:17%;right:9%;font-size:8px;letter-spacing:.08em;background:#10111088;backdrop-filter:blur(8px)}
+.hero-stamp i{font-size:22px;font-style:normal}
+.section-heading{align-items:end}
+.section-heading>p{max-width:230px;line-height:1.8;color:#a9ad9d}
+.project-grid{gap:clamp(22px,3vw,42px) clamp(14px,2vw,28px)}
+.project-card{min-width:0}
+.project-art{aspect-ratio:1.16/1;overflow:hidden}
+.project-image-art img{transition:transform .65s cubic-bezier(.2,.75,.2,1),filter .4s}
+.project-card:hover .project-image-art img{transform:scale(1.025)}
+.project-meta{padding-top:15px;gap:12px}
+.project-meta>div{min-width:0}
+.project-meta h3{font-size:clamp(16px,1.7vw,22px);line-height:1.2}
+.project-meta p{font-size:11px;line-height:1.65}
+.project-arrow{flex:0 0 36px;width:36px;height:36px}
+.manifesto{padding:clamp(50px,8vw,110px) clamp(22px,8.5vw,130px)}
+.manifesto-copy{font-size:clamp(58px,10.2vw,148px);line-height:.88}
+.manifesto-bottom{gap:24px}
+.process-section{padding-top:clamp(60px,8vw,110px);padding-bottom:clamp(60px,8vw,110px)}
+.services{padding-top:clamp(60px,8vw,105px);padding-bottom:clamp(65px,9vw,120px)}
+.service-row{display:grid;grid-template-columns:54px minmax(160px,1fr) minmax(150px,.8fr) 24px;gap:16px;align-items:center}
+.service-row h3{font-size:clamp(19px,2.2vw,29px)}
+.service-row p{font-size:12px;line-height:1.7}
+.footer{position:relative;overflow:hidden}
+.footer:before{content:"MM";position:absolute;right:-.04em;top:.06em;font-size:clamp(180px,35vw,520px);line-height:.8;font-weight:800;letter-spacing:-.12em;color:#10111008;pointer-events:none}
+.footer>*{position:relative}
+@media(max-width:760px){
+ .hero{min-height:0;padding-top:66px;padding-bottom:52px}
+ .hero-kicker{gap:7px;font-size:8px;letter-spacing:.09em}
+ .hero-title{font-size:clamp(68px,15vw,112px);line-height:.82}
+ .title-middle{margin-left:2%;margin-top:.16em}
+ .hero-stamp{top:12%;right:7%;width:62px;height:62px;font-size:5px}
+ .hero-stamp i{font-size:16px}
+ .hero-bottom{margin-top:46px}
+ .section-heading{align-items:start}
+ .section-heading>p{font-size:11px;max-width:120px}
+ .project-art{aspect-ratio:1/1}
+ .manifesto{padding:52px 6%}
+ .manifesto-copy{font-size:clamp(49px,11.6vw,82px)}
+ .service-row{grid-template-columns:30px minmax(0,1fr) 20px;gap:10px}
+ .service-row p{grid-column:2;grid-row:2;margin:0 0 7px}
+ .service-arrow{grid-column:3;grid-row:1}
+ .footer:before{top:22%;right:-.1em}
+}
+@media(max-width:420px){
+ .hero-kicker{font-size:7px}
+ .hero-title{font-size:14.5vw}
+ .section-heading>p{max-width:100px}
+ .project-meta h3{font-size:16px}
+}
